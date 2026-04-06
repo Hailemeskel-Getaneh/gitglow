@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitGlow | Premium GitHub Stats Generator</title>
+    <meta name="description" content="Generate beautiful, dynamic GitHub stats cards for your profile README. Accurate, fast, and fully customizable.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>GitGlow</h1>
+            <p class="subtitle">Elevate your GitHub profile with premium, live-updating stats cards that actually work.</p>
+        </header>
+
+        <section class="generator-section">
+            <div class="form-group">
+                <label for="username">GitHub Username</label>
+                <input type="text" id="username" placeholder="e.g. Hailemeskel-Getaneh" autocomplete="off">
+            </div>
+
+            <div class="form-group">
+                <label for="theme">Choose Theme</label>
+                <select id="theme">
+                    <option value="dark">Dark (Default)</option>
+                    <option value="midnight">Midnight (Ultra Dark)</option>
+                    <option value="glow">Glow (Glassmorphism)</option>
+                </select>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 2rem;">
+                <input type="checkbox" id="countPrivate" style="width: 18px; height: 18px; cursor: pointer;">
+                <label for="countPrivate" style="cursor: pointer; color: #8b949e; font-size: 0.95rem; margin-bottom: 0;">Count Private Commits</label>
+            </div>
+
+            <div class="preview-grid" id="previewGrid">
+                <!-- Stats Card -->
+                <div class="preview-card">
+                    <div class="card-title">General Stats</div>
+                    <img id="statsPreview" src="/api/stats?username=Hailemeskel-Getaneh" alt="Stats Preview">
+                    <button class="copy-btn" onclick="copyMarkdown('stats')">Copy Markdown</button>
+                </div>
+
+                <!-- Languages Card -->
+                <div class="preview-card">
+                    <div class="card-title">Top Languages</div>
+                    <img id="langsPreview" src="/api/languages?username=Hailemeskel-Getaneh" alt="Languages Preview">
+                    <button class="copy-btn" onclick="copyMarkdown('langs')">Copy Markdown</button>
+                </div>
+
+                <!-- Streak Card -->
+                <div class="preview-card">
+                    <div class="card-title">Streak Stats</div>
+                    <img id="streakPreview" src="/api/streak?username=Hailemeskel-Getaneh" alt="Streak Preview">
+                    <button class="copy-btn" onclick="copyMarkdown('streak')">Copy Markdown</button>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2026 GitGlow. Built with &hearts; for the GitHub community.</p>
+        </footer>
+    </div>
+
+    <script>
+        const usernameInput = document.getElementById('username');
+        const themeSelect = document.getElementById('theme');
+        const countPrivateToggle = document.getElementById('countPrivate');
+        const statsPreview = document.getElementById('statsPreview');
+        const langsPreview = document.getElementById('langsPreview');
+        const streakPreview = document.getElementById('streakPreview');
+
+        function updatePreviews() {
+            const username = usernameInput.value || 'Hailemeskel-Getaneh';
+            const theme = themeSelect.value;
+            const countPrivate = countPrivateToggle.checked;
+            const bust = new Date().getTime(); // Prevent browser caching
+
+            statsPreview.src = `/api/stats?username=${username}&theme=${theme}&count_private=${countPrivate}&t=${bust}`;
+            langsPreview.src = `/api/languages?username=${username}&theme=${theme}&t=${bust}`;
+            streakPreview.src = `/api/streak?username=${username}&theme=${theme}&t=${bust}`;
+        }
+
+        usernameInput.addEventListener('input', debounce(updatePreviews, 500));
+        themeSelect.addEventListener('change', updatePreviews);
+        countPrivateToggle.addEventListener('change', updatePreviews);
+
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+
+        function copyMarkdown(type) {
+            const username = usernameInput.value || 'Hailemeskel-Getaneh';
+            const theme = themeSelect.value;
+            const countPrivate = countPrivateToggle.checked;
+            const host = window.location.origin;
+            
+            let url = '';
+            if (type === 'stats') url = `${host}/api/stats?username=${username}&theme=${theme}&count_private=${countPrivate}`;
+            if (type === 'langs') url = `${host}/api/languages?username=${username}&theme=${theme}`;
+            if (type === 'streak') url = `${host}/api/streak?username=${username}&theme=${theme}`;
+
+            const markdown = `![GitHub ${type}](${url})`;
+            navigator.clipboard.writeText(markdown).then(() => {
+                alert('Markdown copied to clipboard!');
+            });
+        }
+    </script>
+</body>
+</html>
