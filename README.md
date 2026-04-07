@@ -1,18 +1,29 @@
 # 🌟 GitGlow
 
-**GitGlow** is a premium, high-performance GitHub statistics generator designed to make your profile README stand out. It provides real-time, dynamic cards for your stats, top languages, and contribution streaks.
+**GitGlow** is a premium, high-performance GitHub statistics generator designed to make your profile README stand out. It provides real-time, dynamic cards for your stats, top languages, and contribution streaks with a focus on accuracy and aesthetics.
 
 ![GitGlow Preview](https://github-readme-stats.vercel.app/api?username=Hailemeskel-Getaneh&theme=dark) *(Example style)*
+
+## ✨ Features
+
+- **Lifetime Accuracy**: Real-time lifetime totals for Commits, PRs, and Issues via the GitHub Search API.
+* **8+ Premium Themes**: Curated palettes like **Glow**, **Radical**, **Tokyo Night**, and **Dracula**.
+* **Private Commit Support**: Accurately counts your private contributions (requires `repo` scope).
+* **Live UI Generator**: A sleek, tabbed dashboard to customize and preview your cards instantly.
+* **Optimized Performance**: Built-in 2-hour server-side caching and rate limiting.
+
+---
 
 ## 🚀 Getting Started
 
 ### 1. Prerequisites
 - **Node.js** (v18 or higher)
-- A **GitHub Personal Access Token (PAT)**. [Create one here](https://github.com/settings/tokens/new?scopes=repo,read:user,user:follow). (No specific scopes needed for public stats, but `repo` and `user` are recommended).
+- A **GitHub Personal Access Token (PAT)**. [Create one here](https://github.com/settings/tokens/new?scopes=repo,read:user,user:follow). 
 
 ### 2. Installation
-Clone this repository and install dependencies:
 ```bash
+git clone https://github.com/Hailemeskel-Getaneh/gitglow.git
+cd gitglow
 npm install
 ```
 
@@ -21,7 +32,7 @@ Create a `.env` file from the example:
 ```bash
 cp .env.example .env
 ```
-Open `.env` and add your **GitHub PAT**:
+Add your **GitHub PAT**:
 ```env
 GITHUB_TOKEN=your_token_here
 ```
@@ -30,40 +41,54 @@ GITHUB_TOKEN=your_token_here
 ```bash
 npm run dev
 ```
-Visit `http://localhost:3000` to use the premium URL generator!
+Visit `http://localhost:3000` to start glowing!
+
+---
+
+## ☁️ Deployment
+
+### 📐 Deploy to Vercel (Recommended)
+1. Fork this repository to your GitHub account.
+2. Go to [Vercel](https://vercel.com/) and click **"Add New"** > **"Project"**.
+3. Import your `gitglow` repository.
+4. In **Environment Variables**, add `GITHUB_TOKEN` with your Personal Access Token.
+5. Click **Deploy**. Vercel will automatically use the included `vercel.json` configuration.
+
+### 🚂 Deploy to Railway
+1. Create a new project on [Railway](https://railway.app/).
+2. Connect your GitHub repository.
+3. Add `GITHUB_TOKEN` in the **Variables** tab.
+4. Railway will automatically detect the `start` script and deploy.
 
 ---
 
 ## 🎨 API Usage
 
-### General Stats
-`GET /api/stats?username=yourusername&theme=glow`
-
-### Top Languages
-`GET /api/languages?username=yourusername&theme=midnight`
-
-### Streak Stats
-`GET /api/streak?username=yourusername&theme=dark`
+### Endpoints
+- **Stats**: `/api/stats?username=USER` 
+- **Languages**: `/api/languages?username=USER`
+- **Streak**: `/api/streak?username=USER`
+- **Repos**: `/api/repos?username=USER`
 
 ### Query Parameters
 | Parameter | Description |
 | --- | --- |
 | `username` | Your GitHub username (Required) |
-| `theme` | `dark`, `midnight`, or `glow` |
+| `theme` | `dark`, `midnight`, `glow`, `radical`, `tokyonight`, `dracula`, `ocean`, `solarized` |
+| `count_private` | Set to `true` to include private contributions |
 | `hide_border` | Set to `true` to remove the card border |
+| `hide` | Comma-separated list of stats to hide (e.g., `stars,commits`) |
 
 ---
 
-## ☁️ Deployment (Render / Vercel)
-
-1. Connect your GitHub repository to **Render**.
-2. Set the **Build Command** to `npm install`.
-3. Set the **Start Command** to `npm start`.
-4. Add your `GITHUB_TOKEN` as an **Environment Variable** in the Render dashboard.
-
 ## 🛠️ Tech Stack
 - **Backend**: Node.js, Express
-- **Data**: GitHub GraphQL API (Octokit)
-- **Visuals**: Dynamic SVG Templates
+- **Data**: GitHub GraphQL & Search APIs
+- **Visuals**: Dynamic SVG Rendering Engine
+- **Styling**: Vanilla CSS (Premium Micro-animations)
 - **Caching**: Node-Cache (2-hour TTL)
-# gitglow
+
+---
+
+Built with ♥ for the developer community.
+
