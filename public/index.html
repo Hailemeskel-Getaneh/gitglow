@@ -58,7 +58,7 @@
                 <input type="checkbox" id="hideBorder">
                 <span>Hide Border</span>
             </label>
-            <label class="check-opt" id="privateToggleWrap" style="display:none">
+            <label class="check-opt" id="privateToggleWrap">
                 <input type="checkbox" id="countPrivate">
                 <span>Count Private Commits</span>
             </label>
@@ -159,8 +159,6 @@
         document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
         btn.classList.add('active');
         document.getElementById(`tab-${activeTab}`).classList.add('active');
-        // Show private toggle only on Stats tab
-        privateWrap.style.display = (activeTab === 'stats') ? 'flex' : 'none';
     });
 
     /* ── Hide-stat pills toggling ── */
@@ -186,10 +184,11 @@
     /* ── Update all previews ── */
     function updatePreviews() {
         const hidden = [...hideStatCbs].filter(c => c.checked).map(c => c.value).join(',');
-        statsPreview.src  = `/api/stats?${buildParams({ count_private: countPrivateCb.checked, hide: hidden })}`;
-        langsPreview.src  = `/api/languages?${buildParams()}`;
-        streakPreview.src = `/api/streak?${buildParams()}`;
-        reposPreview.src  = `/api/repos?${buildParams()}`;
+        const common = { count_private: countPrivateCb.checked };
+        statsPreview.src  = `/api/stats?${buildParams({ ...common, hide: hidden })}`;
+        langsPreview.src  = `/api/languages?${buildParams(common)}`;
+        streakPreview.src = `/api/streak?${buildParams(common)}`;
+        reposPreview.src  = `/api/repos?${buildParams(common)}`;
     }
 
     /* ── Listeners ── */
@@ -210,14 +209,15 @@
         const theme     = themeSelect.value;
         const host      = window.location.origin;
         const border    = hideBorderCb.checked ? '&hide_border=true' : '';
+        const priv      = countPrivateCb.checked ? '&count_private=true' : '';
         const hidden    = [...hideStatCbs].filter(c => c.checked).map(c => c.value).join(',');
         const labels    = { stats: 'GitHub Stats', langs: 'Top Languages', streak: 'GitHub Streak', repos: 'Pinned Repos' };
 
         let url = '';
-        if (type === 'stats')  url = `${host}/api/stats?username=${username}&theme=${theme}&count_private=${countPrivateCb.checked}${hidden ? '&hide=' + hidden : ''}${border}`;
-        if (type === 'langs')  url = `${host}/api/languages?username=${username}&theme=${theme}${border}`;
-        if (type === 'streak') url = `${host}/api/streak?username=${username}&theme=${theme}${border}`;
-        if (type === 'repos')  url = `${host}/api/repos?username=${username}&theme=${theme}${border}`;
+        if (type === 'stats')  url = `${host}/api/stats?username=${username}&theme=${theme}${priv}${hidden ? '&hide=' + hidden : ''}${border}`;
+        if (type === 'langs')  url = `${host}/api/languages?username=${username}&theme=${theme}${priv}${border}`;
+        if (type === 'streak') url = `${host}/api/streak?username=${username}&theme=${theme}${priv}${border}`;
+        if (type === 'repos')  url = `${host}/api/repos?username=${username}&theme=${theme}${priv}${border}`;
 
         navigator.clipboard.writeText(`![${labels[type]}](${url})`).then(() => {
             const btn = event.target;

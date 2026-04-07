@@ -105,14 +105,14 @@ app.get('/api/languages', rateLimiter, async (req, res) => {
 
 // ─── STREAK CARD ──────────────────────────────────────────────────────────────
 app.get('/api/streak', rateLimiter, async (req, res) => {
-    const { username, theme, hide_border, title_color, text_color, bg_color } = req.query;
+    const { username, theme, hide_border, count_private, title_color, text_color, bg_color } = req.query;
 
     if (!username) {
         return svgResponse(res, renderErrorCard('Username parameter is required.'));
     }
 
     try {
-        const streak = await fetchStreak(username, process.env.GITHUB_TOKEN);
+        const streak = await fetchStreak(username, process.env.GITHUB_TOKEN, count_private === 'true');
         const svg = renderStreakCard(streak, { theme, hide_border, title_color, text_color, bg_color });
         svgResponse(res, svg);
     } catch (error) {
