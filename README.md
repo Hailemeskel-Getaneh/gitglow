@@ -2,7 +2,7 @@
 
 **GitGlow** is a premium, high-performance GitHub statistics generator designed to make your profile README stand out. It provides real-time, dynamic cards for your stats, top languages, and contribution streaks with a focus on accuracy and aesthetics.
 
-![GitGlow Preview](![GitHub Streak](https://gitglow-three.vercel.app/api/streak?username=Hailemeskel-Getaneh&theme=glow&count_private=true)) *(Example style)*
+![GitGlow Preview](https://gitglow-three.vercel.app/api/streak?username=Hailemeskel-Getaneh&theme=glow&count_private=true)) 
 
 ## ✨ Features
 
